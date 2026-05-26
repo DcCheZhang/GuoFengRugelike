@@ -1,0 +1,2 @@
+import{G as i}from"./GameState-DLn0qV3R.js";function c(e){document.querySelectorAll(".view").forEach(t=>{t.classList.contains("active")&&(t.style.opacity="0",setTimeout(()=>{t.classList.remove("active"),t.style.opacity=""},300))}),setTimeout(()=>{const t=document.getElementById("view-"+e);t&&(t.classList.add("active"),t.style.opacity="0",t.style.transition="opacity 0.3s",requestAnimationFrame(()=>{t.style.opacity="1"})),i.cv=e},300)}export{c as switchView};
+//# sourceMappingURL=ViewHelpers-DDnmuU6t.js.map
