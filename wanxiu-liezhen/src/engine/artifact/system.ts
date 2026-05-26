@@ -48,13 +48,7 @@ export class ArtifactSystemInstance implements ArtifactInstance {
     return {} as any;
   }
 
-  // 获取品质乘数
-  private getQualityMultiplier(): number {
-    return getQualityMultiplier(this.config.quality);
-  }
-
-  // 装备时触发
-  onEquip(unit: PlayerUnit): void {
+  onEquip = (unit: PlayerUnit): void => {
     const qMult = this.getQualityMultiplier();
     const context: TriggerContext = {
       artifactId: this.id,
@@ -63,10 +57,9 @@ export class ArtifactSystemInstance implements ArtifactInstance {
       enemies: [],
     };
     this.triggerEffects(TriggerType.ON_EQUIP, context, qMult);
-  }
+  };
 
-  // 卸下时触发
-  onUnequip(unit: PlayerUnit): void {
+  onUnequip = (unit: PlayerUnit): void => {
     const qMult = this.getQualityMultiplier();
     const context: TriggerContext = {
       artifactId: this.id,
@@ -75,6 +68,11 @@ export class ArtifactSystemInstance implements ArtifactInstance {
       enemies: [],
     };
     this.triggerEffects(TriggerType.ON_UNEQUIP, context, qMult);
+  };
+
+  // 获取品质乘数
+  private getQualityMultiplier(): number {
+    return getQualityMultiplier(this.config.quality);
   }
 
   // 触发效果

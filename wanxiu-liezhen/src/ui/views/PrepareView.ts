@@ -11,6 +11,50 @@ import { BE } from '@/engine/battle';
 
 let selSynth: PlayerUnit[] = [];
 
+function updateUnitSelection(): void {
+  document.querySelectorAll('.unit-grid .card[data-uid]').forEach((card) => {
+    const uid = parseInt((card as HTMLElement).dataset.uid!, 10);
+    const sel = selSynth.some((s) => s.uid === uid);
+    if (sel) {
+      (card as HTMLElement).style.borderColor = 'var(--cinnabar)';
+      (card as HTMLElement).style.boxShadow = 'var(--shadow-cinnabar)';
+    } else {
+      (card as HTMLElement).style.borderColor = '';
+      (card as HTMLElement).style.boxShadow = '';
+    }
+  });
+
+  const synthSection = document.querySelector('.prepare-section:nth-child(3)');
+  if (synthSection) {
+    const groups = findSynthGroups();
+    let synthHtml = '';
+    if (selSynth.length >= 3) {
+      const idSet = new Set(selSynth.map((u) => u.did));
+      if (idSet.size === 1 && selSynth.every((u) => u.tier === selSynth[0].tier && u.lv === selSynth[0].lv)) {
+        synthHtml = `<div style="font-size:.8rem;color:var(--paper);margin:4px 0">
+          ${selSynth[0].nm}(${TIER_NAMES[selSynth[0].tier]} Lv${selSynth[0].lv}) ×${selSynth.length}
+          <button class="btn btn-sm" id="btn-manual-synth">手动合成</button>
+        </div>`;
+      }
+    }
+    synthHtml += groups
+      .map(
+        (g) =>
+          `<div style="font-size:.8rem;color:var(--paper);margin:4px 0">
+            ${g.units[0].nm}(${TIER_NAMES[g.tier]} Lv${g.lv}) ×${g.units.length}
+            <button class="btn btn-sm" data-synth-did="${g.did}" data-synth-tier="${g.tier}" data-synth-lv="${g.lv}">合成</button>
+          </div>`
+      )
+      .join('');
+    const h3 = synthSection.querySelector('h3');
+    if (h3) h3.textContent = `合成 ${selSynth.length > 0 ? `(已选${selSynth.length})` : ''}`;
+    const contentDiv = synthSection.querySelector('div:not(:first-child)');
+    if (contentDiv) {
+      contentDiv.innerHTML = synthHtml || '<div style="font-size:.75rem;color:#666">无可合成的单位</div>';
+    }
+  }
+}
+
 export async function renderPrepare(): Promise<void> {
   selSynth = [];
   const el = document.getElementById('view-prepare')!;
@@ -202,7 +246,7 @@ export async function renderPrepare(): Promise<void> {
       } else {
         selSynth.push(unit);
       }
-      renderPrepare();
+      updateUnitSelection();
     });
   });
 
@@ -248,7 +292,7 @@ export async function renderPrepare(): Promise<void> {
 
 async function startBattle(): Promise<void> {
   const enemies = genEnemies(GS.round);
-  BE.init(GS.units, enemies as any);
+  BE.init(GS.units, enemies);
 
   const canvas = document.getElementById('battle-canvas') as HTMLCanvasElement;
   canvas.style.display = 'block';

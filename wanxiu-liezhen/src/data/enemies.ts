@@ -1,4 +1,4 @@
-import { EnemyData, EnemyClass, RoundType } from '@/types';
+import { EnemyData, EnemyUnit, EnemyClass, RoundType } from '@/types';
 import { GC } from '@/data/constants';
 import { R } from '@/utils/random';
 import eData from '@/data/json/enemies.json';
@@ -51,24 +51,57 @@ function getEnemyById(id: number): EnemyData | undefined {
   return ED.find((e) => e.id === id) || EB.find((e) => e.id === id);
 }
 
-function createEnemyUnit(eid: number, dm: number): EnemyData | null {
+function createEnemyUnit(eid: number, dm: number): EnemyUnit | null {
   const base = getEnemyById(eid);
   if (!base) return null;
+  const uid = enemyUID++;
+  const hp = Math.round(base.hp * dm);
   return {
-    id: base.id, nm: base.nm, ct: base.ct,
-    hp: Math.round(base.hp * dm), at: Math.round(base.at * dm),
-    df: Math.round(base.df * dm), as: base.as, ms: base.ms, rg: base.rg,
-    cr: base.cr, cd: base.cd, dr: base.dr, tg: Math.round(base.tg * dm),
+    uid,
+    did: base.id,
+    nm: base.nm,
+    ct: base.ct as EnemyClass,
+    hp,
+    maxHp: hp,
+    attack: Math.round(base.at * dm),
+    defense: Math.round(base.df * dm),
+    attackSpeed: base.as,
+    moveSpeed: base.ms,
+    range: base.rg,
+    critRate: base.cr,
+    critDamage: base.cd,
+    dodgeRate: base.dr,
+    toughness: Math.round(base.tg * dm),
+    alive: true,
+    rcd: -1,
+    bx: 0,
+    by: 0,
+    acd: 0,
+    tgt: null,
+    dd: 0,
+    dt: 0,
+    hd: 0,
+    kills: 0,
+    isPlayer: false,
+    vx: 0,
+    vy: 0,
+    walkAngle: 0,
+    idleTimer: 0,
+    idleDx: 0,
+    idleDy: 0,
+    _deathT: 0,
   };
 }
 
-export function genEnemies(round: number): any[] {
+let enemyUID = 10000;
+
+export function genEnemies(round: number): EnemyUnit[] {
   const chapter = Math.min(Math.floor((round - 1) / 20), 8);
   const ri = (round - 1) % 20 + 1;
   const dm = getDifficulty(round);
   const rt = getRoundType(round);
   const pool = chapterPools[chapter] || [];
-  const enemies: any[] = [];
+  const enemies: EnemyUnit[] = [];
 
   if (rt === RoundType.BOSS) {
     const bid = chapterBossIds[chapter] || 22;

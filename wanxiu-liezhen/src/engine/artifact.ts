@@ -10,7 +10,7 @@ export * from './artifact/index';
 function createArtifactInstanceLegacy(data: any): ArtifactInstance {
   const config = artifactSystem.createArtifact(data.id);
   if (config) {
-    return config;
+    return config as ArtifactInstance;
   }
 
   // 降级到旧系统
