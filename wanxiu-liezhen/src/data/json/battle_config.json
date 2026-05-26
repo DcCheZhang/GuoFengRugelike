@@ -1,0 +1,26 @@
+{
+  "goldCap": 9999,
+  "initialSpirit": 200,
+  "initialGold": 0,
+  "rerollCost": 100,
+  "rerollMax": 3,
+  "shopRefresh": 100,
+  "sellReturn": 0.5,
+  "unitCap": 20,
+  "reviveTurns": 4,
+  "reviveHp": 0.5,
+  "defenseFactor": 0.8,
+  "skillCoefficient": 1,
+  "randomMin": 0.9,
+  "randomMax": 1.1,
+  "openPct": 0.8,
+  "maxLevel": 5,
+  "canvasWidth": 1200,
+  "canvasHeight": 600,
+  "fixedTickRate": 60,
+  "tierWeights": [
+    { "tier": "normal", "weight": 60 },
+    { "tier": "scarce", "weight": 30 },
+    { "tier": "legendary", "weight": 10 }
+  ]
+}

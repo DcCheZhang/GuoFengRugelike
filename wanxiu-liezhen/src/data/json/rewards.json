@@ -1,0 +1,32 @@
+{
+  "goldByRoundType": {
+    "normal": [80, 150],
+    "relic": [100, 200],
+    "shop": [100, 150],
+    "boss": [500, 800]
+  },
+  "artifactByRoundType": {
+    "relic": {
+      "chance": 1,
+      "weights": [
+        { "quality": "normal", "weight": 60 },
+        { "quality": "scarce", "weight": 30 },
+        { "quality": "legendary", "weight": 10 }
+      ]
+    },
+    "other": {
+      "chance": 0.05,
+      "weights": [
+        { "quality": "normal", "weight": 70 },
+        { "quality": "scarce", "weight": 25 },
+        { "quality": "legendary", "weight": 5 }
+      ]
+    }
+  },
+  "recruitCount": 3,
+  "recruitTierWeights": [
+    { "tier": "normal", "weight": 50 },
+    { "tier": "scarce", "weight": 35 },
+    { "tier": "legendary", "weight": 15 }
+  ]
+}
